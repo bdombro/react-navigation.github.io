@@ -20,21 +20,15 @@ We will do this by persisting the navigation state using the React Navigation's 
 
 First, start by creating initial navigation structure and React components. When you're done with that, continue with modelling your state in MST. If you want to learn more about this, check out the [egghead.io course](https://egghead.io/lessons/react-describe-your-application-domain-using-mobx-state-tree-mst-models).
 
-At this point, you're probably wondering how to connect your MST objects with the components. The answer is in the [mobx-react package](https://github.com/mobxjs/mobx-react) that contains React bindings for MobX (they also work for MST). You will likely be using the `Provider` component and the `inject` and `observer` functions.
+At this point, you're probably wondering how to connect your MST objects with the components. The answer is in the [mobx-react package](https://github.com/mobxjs/mobx-react) that contains React bindings for MobX (they also work for MST). By wrapping your components with the `observer` function, the Mobx will trigger a re-render of your component once the data they render changes.
 
-Use `Provider` to wrap what you return from your root component's render method:
+For example,
 
 ```js
-<Provider myObject={this.myObject}>
-  <NavigationNativeContainer>
-    {/* Screen configuration */}
-  </NavigationNativeContainer>
-</Provider>
+import {GlobalStore} from "./GlobalStore";
+
+export const MyComponent = observer(() => <Text>{GlobalStore.user.id}</Text>);
 ```
-
-this will allow you to access `myObject` from any React component in the application through the `inject` function which can be quite useful.
-
-Use `observer` function to wrap all components that render observable data. This will make sure the components re-render once the data they render changes.
 
 ### Navigation params
 
